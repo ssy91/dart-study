@@ -1,20 +1,23 @@
 void main() {
-// 구구단 1단 만들기
+  //구구단 1~9단 중 짝수단만 출력하는 반복문 작성
+  //1. for 문 사용
+  int dan, number;
+  for (dan = 2; dan <= 8; dan = dan + 2) {
+    for (number = 1; number <= 9; number++) {
+      print("$dan x $number = ${dan * number}");
+    }
+  }
 
- var dan = 1;
- var count = 1;
+  //while 문 사용
+  int dan2 = 2, number2 = 1;
 
- for(count = 1; count <=9; count++) {
-print("$dan x $count = ${dan * count}");
- }
+  while (dan2 <= 8) {
+    while (number2 <= 9) {
+      print("$dan2 x $number2 = ${dan2 * number2}");
 
- 
-// 선생님 답
-var dan1= 1;
-var count1 = 1;
-var result = 0;
-
-for (count1 = 1; count1 <= 9; count1++) {
-print("$dan x $count1 = $result");
-}
+      number2++;
+    }
+    number2 = 1;
+    dan2 = dan2 + 2;
+  }
 }
