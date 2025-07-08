@@ -7,10 +7,10 @@ print(2*pi*half);
 
 
 //선생님 답
-double pi = 3.14;
-int half = 7;
+double pi1 = 3.14;
+int half1 = 7;
 
-double dulle = 2 * half * pi;
+double dulle = 2 * half1 * pi1;
 
 print(dulle);
 

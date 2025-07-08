@@ -6,7 +6,7 @@ void main() {
 
 
   //선생님 답
-  final int num1 = 7;
+  final int num2 = 7;
   //const int num2 = 5;
 
 
