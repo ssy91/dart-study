@@ -8,6 +8,7 @@ void main() {
 print("$dan x $count = ${dan * count}");
  }
 
+ 
 // 선생님 답
 var dan1= 1;
 var count1 = 1;
