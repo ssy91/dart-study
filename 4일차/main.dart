@@ -56,6 +56,7 @@ class Integer {
 
 // extends = 다음으로 적힐 클래스명에 있는 모든 내용들을 가져올거야.
 // class newInteger extends 클래스명 {}
+// class 새로운 클래스명  extends  기존 클래스명 {}
 
 class newInteger extends Integer {
   // List<자료형> = 이 자료형에 속하는 데이터만 이 리스트에 담을거야.
