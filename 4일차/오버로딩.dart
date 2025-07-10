@@ -46,38 +46,20 @@ class Integer {
   }
 
   // 연산자가 함수 이름이 되는 함수
-  // 더하기가 함수 이름이 되는 함수
-  Integer operator +(Integer givenValue) {
+  int operator +(Integer givenValue) {
     print('integer 클래스에서 사용되는 + 입니다.');
-
-    return Integer(_value + givenValue.get());
+    return _value + givenValue.get(); //_valur + 10;
   }
-
-  // 빼기가 함수 이름이 되는 함수
-  Integer operator -(Integer givenValue) {
-    print('이거 썼니?');
-    return Integer(_value - givenValue.get());
-  }
-
-  // 곱하기가 함수 이름이 되는 함수
-  Integer operator *(Integer givenValue) {
-    return Integer(_value * givenValue.get());
-  }
-
-  // 나누기가 함수 이름이 되는 함수
 }
 
 void main() {
   var num1 = Integer(5);
   var num2 = Integer(10);
-  var num3 = num1 + num2;
-  var num4 = num1 - num2;
-  var num5 = num1 * num2;
 
   // print(num1.add(num2.get()));
   // print(num1.sub(num2.get()));
 
-  print(num3.get());
-  print(num4.get());
-  print(num5.get());
+  print(num1 + num2);
+
+  print(1 + 2);
 }
