@@ -1,18 +1,10 @@
 class Integer {
-  // 클래스 내에서 선언이 되는 변수 -> 인스턴스 변수
   late int _value;
 
-  // 생성자가 필요 (메인에서 사용해서, 상단에 입력했던 변수에 값을 담아주기 위해)
-  // 생성자이름 () {};
-  // 생성자의 이름은 클래스의 이름과 동일해야 함
-  // 생성자의 소괄호 안에는 사용자가 입력해준 값을 인스턴스 변수에 담기 위해 사용됨
-  // 생성할 때 변수를 입력하고 싶지 않다면 대괄호 [] 안에 변수를 선언하고, 기본값을 주면 됨
   Integer([int givenNumber = 0]) {
-    // 사용자가 입력한 givenValue 를 우리의 인스턴스 변수 안에 담을거야
     _value = givenNumber;
   }
 
-  // 인스턴스 변수를 반환하기 위한 함수
   int get() {
     return _value;
   }
@@ -54,23 +46,22 @@ class Integer {
   }
 }
 
-// extends = 다음으로 적힐 클래스명에 있는 모든 내용들을 가져올거야.
-// class newInteger extends 클래스명 {}
-// class 새로운 클래스명  extends  기존 클래스명 {}
-
-class newInteger extends Integer {
-  // List<자료형> = 이 자료형에 속하는 데이터만 이 리스트에 담을거야.
+class newInteger extends Integer with ActivationFlag {
   List<int> _list = [];
 
   newInteger([int givenValue = 0]) {
     _value = givenValue;
   }
 
-  @override // Integer 클래스에 있는 코드에서 이 기능들을 더 추가해서 쓸거야.
+  @override
   void set(int givenValue) {
-    _list.add(_value);
+    if (activated == true) {
+      _list.add(_value);
+      print("set 함수 실행함. 현재 저장된 결과는 $_list 임");
+    } else {
+      print("set 함수 실행 안함");
+    }
 
-    // super = 우리가 클래스를 생성할 때 extends 뒤에 쓴 클래스를 지칭함.
     super.set(givenValue);
   }
 
@@ -82,17 +73,24 @@ class newInteger extends Integer {
   }
 }
 
+mixin ActivationFlag on Integer {
+  bool _flag = true;
+
+  bool get activated => _flag;
+  set activated(bool givenFlag) => (_flag = givenFlag);
+}
+
 void main() {
-  var newNum1 = newInteger(); // newNum1 =0;
+  var num1 = newInteger();
 
-  // print(newNum1._value);
-  // print(newNum1.runtimeType);
+  num1.set(2);
+  num1.set(4);
 
-  newNum1.set(9);
-  newNum1.changeInteger = 2;
-  print(newNum1.get());
+  num1.activated = false;
 
-  newNum1.set(10);
-  print(newNum1.getOld());
-  print(newNum1.asString);
+  num1.set(6);
+  num1.set(8);
+
+  num1.activated = true;
+  num1.set(8);
 }
