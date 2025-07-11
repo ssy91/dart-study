@@ -8,7 +8,7 @@ abstract class Vehicle {
 }
 
 class Boat implements Vehicle {
-  @override
+  @override //이미 있던 기능에서 함수 추가할 때 @override 사용
   drive() {
     print("보트가 물 위를 떠답니다.");
   }
