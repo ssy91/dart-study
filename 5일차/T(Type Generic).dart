@@ -64,8 +64,8 @@ class NewBox<T> {
   // 사용자가 입력한 givenValue 의 자료형을 항상 따라갈거야.
   // 사용자가 1을 입력하게 되면 T -> int 자료형이 되는거고
   // 사용자가 "시계"를 입력하게 되면 T -> String  자료형이 되는거고
-  NewBox(T givenVlaue) {
-    item = givenVlaue;
+  NewBox(T givenValue) {
+    item = givenValue;
   }
 
   dynamic get() {
