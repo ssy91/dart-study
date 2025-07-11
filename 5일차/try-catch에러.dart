@@ -9,11 +9,13 @@ void main() {
   // try-catch 문법 사용 방법: try {} catch(error) {}
   try {
     result = num1 ~/ num2;
-  } on UnsupportedError {
-    print("on Unsupported Error: num2 의 값은 0입니다.");
+  } catch (error) {
+    print("catch : $error");
+
     num2 = 1;
-    print("on Unsupported Error: num2 의 값을 1로 바꾸고, 재시도합니다.");
+    print("catch: num2를 1로 바꾸고 기존 코드를 다시 실행");
     result = num1 ~/ num2;
   }
+
   print("결과는 : $result 입니다.");
 }

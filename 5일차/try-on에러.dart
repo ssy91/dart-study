@@ -7,6 +7,7 @@ void main() {
   // catch = try 중 에러가 발생하면, try 실행을 멈추고 catch 이후의 내용을 실행해라.
 
   // try-catch 문법 사용 방법: try {} catch(error) {}
+  // try-on 문법 사용 방법: try {} on 에러이름 {}
   try {
     result = num1 ~/ num2;
   } on UnsupportedError {
