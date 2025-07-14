@@ -15,12 +15,13 @@ void main() {
     stdout.write("입력해주세요:");
     userInput = stdin.readLineSync(encoding: utf8);
     stdout.writeln("당신은 이것을 입력했습니다.: $userInput");
+    stdout.writeln("당신이 입력한 값은 다음 타입을 가지고 있습니다.: ${userInput.runtimeType}");
   }
 
   stdout.writeln("입력이 종료되었습니다.");
 
   // writeln : 소괄호 안에 있는 내용을 출력하고, 들여쓰기를 진행한다.
   // write : 소괄호 안에 있는 내용을 출력한다.
-  stdout.write("출력1");
-  stdout.writeln("출력2");
+  // stdout.write("출력1");
+  // stdout.writeln("출력2");
 }
