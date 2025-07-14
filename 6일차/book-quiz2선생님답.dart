@@ -1,22 +1,12 @@
-// import 'dart:io';
-
-// void main() {
-//   var iList = <int>[];
-//   var sList = <String>[];
-
-//   stdout.write("숫자 두 개를 , 를 통해 입력해주세요. (예시: 3, 3)");
-//   var input = stdin.readLineSync();
-//   sList = input!.split(',');
-//   for (var item in sList) {
-//     iList.add(int.parse(item));
-//   }
-
-//   // 화면에 값을 출력할 때, string 과 string 을 + 하게 되면 해당 문자열들끼리 붙여 쓴 값이 출력됨
-//   // int 와 int 를 + 했을 땐, 두 수를 더해진 값이 출력됨
-//   stdout.writeln(
-//     "더하기 프로그램을 진행합니다. ${iList[0]} + ${iList[1]} = ${iList[0] + iList[1]}",
-//   );
-// }
+// 다음은 이 프로그램의 실행 결과입니다. 이 실행 결과에 맞는 코드를 짜 보세요.
+// 두 수 곱하기 프로그램 - 첫 번째 수 입력: 5
+// 두 수 곱하기 프로그램 - 두 번째 수 입력: 6
+// 두 수 곱하기 프로그램 - 실행 결과 5 x 6 = 30
+// 한 번 더 진행하시겠습니까? 네
+// 두 수 곱하기 프로그램 - 첫 번째 수 입력: 7
+// 두 수 곱하기 프로그램 - 두 번째 수 입력: 4
+// 한 번 더 진행하시겠습니까? 아니오
+// 프로그램을 종료합니다.
 
 import 'dart:convert';
 import 'dart:io';
@@ -30,7 +20,7 @@ void main() {
     firstNum = stdin.readLineSync(); // String 으로 첫 번째 수가 firstNum 에 저장됨
     stdout.write('두 수 곱하기 프로그램 - 두 번째 수 입력:');
     secondNum = stdin.readLineSync(); //// String 으로 두 번째 수가 secondNum 에 저장됨
-    stdout.writeln(
+    stdout.write(
       "두 수 곱하기 프로그램 - 실행 결과 $firstNum x $secondNum = ${int.parse(firstNum) * int.parse(secondNum)}",
     );
     stdout.write("한 번 더 진행하시겠습니까?");

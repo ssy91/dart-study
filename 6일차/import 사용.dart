@@ -10,8 +10,12 @@ void main() {
   stdout.write("입력해주세요:");
   var userInput = stdin.readLineSync(encoding: utf8);
   stdout.writeln("당신은 이것을 입력했습니다.: $userInput");
+  bool doAgain = true;
 
   while (userInput != "exit") {
+    // userInput != "exit" -> true가 아니면 false를 반환하잖아요
+    // 만약 userInput 이 exit이라면, doAgain을 true 로 바꾸고
+    // exit이 아니면 false로 바꾼다.
     stdout.write("입력해주세요:");
     userInput = stdin.readLineSync(encoding: utf8);
     stdout.writeln("당신은 이것을 입력했습니다.: $userInput");
