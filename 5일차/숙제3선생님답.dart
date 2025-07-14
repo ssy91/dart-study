@@ -12,26 +12,14 @@ class NoStringException implements Exception {
   }
 }
 
-String calc(var a) {
-  var result = a;
-
-  if (result.runtimeType != String) {
-    throw NoStringException();
-  } else {
-    result = "";
-  }
-  return result;
-}
-
 void main() {
   var num = 10;
-  var result;
 
   try {
-    result = (num);
-  } on NoStringException {
-    print("num의 타입이 string 이 아닙니다");
-  } finally {
-    print("해당 값은 문자열이 아닙니다.");
+    if (num.runtimeType != String) {
+      throw NoStringException();
+    }
+  } catch (error) {
+    print(error);
   }
 }
