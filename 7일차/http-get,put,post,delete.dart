@@ -119,10 +119,8 @@ void httpDeleteHandler(HttpRequest request) async {
 }
 
 Future main() async {
-  var server = await HttpServer.bind(
-    InternetAddress.loopbackIPv4, // ip address
-    4040, // port number
-  );
+  var server = await HttpServer.bind(InternetAddress.loopbackIPv4, 3000);
+
   printHttpServerActivated(server);
 
   await for (HttpRequest request in server) {
@@ -143,10 +141,8 @@ Future main() async {
           httpDeleteHandler(request);
           break;
         default:
-          print("Unsupported http method");
+          print("\$ Exception in http request processing");
       }
-    } catch (err) {
-      print("\$ Exception in http request processing");
-    }
+    } catch (error) {}
   }
 }
