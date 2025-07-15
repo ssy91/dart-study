@@ -1,4 +1,61 @@
 import 'dart:io';
+import 'dart:convert';
+
+void printHttpServerActivated(HttpServer server) {
+  var ip = server.address.address;
+  var port = server.port;
+
+  print('\$ Server activated in ${ip}:${port}');
+}
+
+void printHttpRequestInfo(HttpRequest request) async {
+  var ip = request.connectionInfo!.remoteAddress.address;
+  var port = request.connectionInfo!.remotePort;
+  var method = request.method;
+  var path = request.method;
+  print("\$ $method $path from $ip:$port");
+
+  if (request.headers.contentLength != -1) {
+    print("\> content-type   : ${request.headers.contentType}");
+    print("\> content-length : ${request.headers.contentLength}");
+  }
+}
+
+void httpGetHandler(HttpRequest request) async {
+  if (request.uri.path == '/') {
+    var content = "Hello, World!";
+    request.response
+      ..headers.contentType = ContentType('text', 'plain', charset: "utf-8")
+      ..headers.contentLength = content.length
+      ..statusCode = HttpStatus.ok
+      ..write(content);
+  } else if (request.uri.path.contains('/add')) {
+    var vars = request.uri.path.split(',');
+    var result = int.parse(vars[1]) + int.parse(vars[2]);
+    var content = "${vars[1]} + ${vars[2]} = $result";
+    request.response
+      ..headers.contentType = ContentType('text', 'plain', charset: "utf-8")
+      ..headers.contentLength = content.length
+      ..statusCode = HttpStatus.ok
+      ..write(content);
+  } else if (await File(request.uri.path.substring(1)).exists() == true) {
+    var file = File(request.uri.path.substring(1));
+    var content = await file.readAsString();
+    request.response
+      ..headers.contentType = ContentType('text', 'plain', charset: "utf-8")
+      ..headers.contentLength = content.length
+      ..statusCode = HttpStatus.ok
+      ..write(content);
+  } else {
+    var content = "Unsupported URI";
+    request.response
+      ..headers.contentType = ContentType('text', 'plain', charset: "utf-8")
+      ..headers.contentLength = content.length
+      ..statusCode = HttpStatus.notFound
+      ..write(content);
+  }
+  await request.response.close();
+}
 
 Future main() async {
   var ip = InternetAddress.loopbackIPv4;
@@ -6,52 +63,9 @@ Future main() async {
 
   var server = await HttpServer.bind(ip, port);
 
-  print("\$ server activated - ${server.address.address}:${server.port}");
-
-  //server 에 존재하는 request 들에 대해서 계속해서 반복하여 내부 코드를 실행하겠다.
-  await for (HttpRequest request in server) {
-    // try-catch 구조 : try {} catch(errer) {}
-    //  try 뒤에 있는 {} 의 내용을 실행하되, 해당 내용 실행 중 에러가 발생하면
-    // catch 이후에 있는 {} 의 내용으로 바꿔서 실행해라.
-    try {
-      // http://127.0.0.1:4040/ 에서 ip와 port를 제외한 이후 문자열이 / 만 있는지
-      // 확인하는 조건문
-      // request.uri.path -> 위의 url 에서 http://127.0.0.1:4040/ 을 제외한 그 다음 문자열
-      if (request.uri.path == '/') {
-        print('\$ http response is "Hello, World!".');
-        print('\$ send "200 OK".');
-
-        request.response
-          ..statusCode = HttpStatus.ok
-          ..write("Hello, World!");
-      } else if (request.uri.path.contains('/add')) {
-        print("\$ http response is result of 'add' operation.");
-        print("\$ send '200 ok'.");
-
-        var varList = request.uri.path.split(',');
-        var result = int.parse(varList[1]) + int.parse(varList[2]);
-
-        request.response
-          ..statusCode = HttpStatus.ok
-          ..write("${varList[1]} + ${varList[2]} = $result");
-      } else if (await File(request.uri.path.substring(1)).exists() == true) {
-        // request.uri.path -> port 번호까지 다 지운 후 남아있는 텍스트. 즉 /sample.txt
-        // .substring(1) -> 맨 앞에 있는 첫 번쨰 문자열을 제거하겠다. 즉 sample.txt
-        print("\$ http response is'${request.uri.path}' file transfer.");
-        print("\$ send '200 ok'.");
-
-        var file = File(request.uri.path.substring(1));
-        var fileContent = await file.readAsString();
-
-        request.response
-          ..statusCode = HttpStatus.ok
-          ..headers.contentType = ContentType('text', 'plain', charset: "utf-8")
-          ..write(fileContent);
-      } else {}
-
-      await request.response.close();
-    } catch (error) {
-      print("\$ 요청 수행 중 에러 발생: $error");
-    }
-  }
+  // HTTP 에서 가장 많이 사용할 메서드 4가지
+  // 1. GET : 우리가 서버에게 어떤것을 (읽겠다) 라고 보내는 요청
+  // 2. POST : 우리가 서버에게 어떤 것을 쓰겠다 (생성하겠다) 라고 보내는 요청
+  // 3. PUT : 우리가 서버에게 어떤 것을 쓰겠다 (수정하겠다) 라고 보내는 요청
+  // 4. DELETE : 우리가 서버에게 어떤 것을 (삭제하겠다) 라고 보내는 요청
 }

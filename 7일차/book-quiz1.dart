@@ -43,7 +43,7 @@ Future main() async {
       // 우리는 사용자가 요청한 응답에 내용에 대한 응답을 전부 다 썼으니, 이 연결을 종료할게
       await request.response.close();
     } catch (error) {
-      print("에러발생");
+      print("에러발생!");
     }
   }
 }
