@@ -53,7 +53,7 @@ void printAndSendHttpResponse(var db, var request, var content) async {
   await request.response.close();
 }
 
-void createDB(var db, var request) async {
+void createDB(Map db, HttpRequest request) async {
   // content 변수에 사용자의 요청을 utf8 코드로 해독해서 담고 있구나.
   var content = await utf8.decoder.bind(request).join();
   // transaction 변수에 utf8 코드로 해독된 사용자의 요청을 담고 있구나.
