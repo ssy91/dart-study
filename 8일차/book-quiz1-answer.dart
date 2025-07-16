@@ -1,21 +1,14 @@
-// REST 라는 HTTP 통신을 어떻게 사용할 지에 대한 규약에 대해서 학습
-// REST 에서 기본적으로 사용되는 메서들 - POST, GET, PUT, DELETE 가 있다.
-// 이 메서드들을 사용할 때 각 기능들은 다음의 메서드를 이용한다.
-// REST 에서는 기본적으로 CRUD 를 구현하게 되는데, CRUD는 다음과 같은 기능을 한다.
-// CREATE (생성) - POST
-// READ (조회) - GET
-// UPDATE (수정) - PUT
-// DELETE (삭제) - DELETE
-// REST 방식으로 개발을 진행하면 RESTful 하다. 라고 부른다.
-// 기본적으로 REST 를 이용해 API 를 구현할 때에는 다음의 구조를 따라서 만들게 된다.
-// ip:port/{기능이름}/{KEY값}
-// 예를 들어서 사용자 생성 이라는 기능을 만들어야 한다면?
-// 127.0.0.1:4040/user 로 POST 메서드를 이용하면 되겠죠.
-// 수정 기능이라면?
-// 127.0.0.1:4040/user/{키값} 으로 PUT 메서드를 이용하면 되겠죠.
+// 현재 rest-crud.dart 에 있는 파일에서 updateDB 부분은 수정할 데이터가 들어가 있는 값을
+// 전부 body에 담아서 사용을 하고 있습니다.
+// 이 부분을 저희는 수정할 데이터의 key 값을 요청의 마지막 부분에 담아서 수정을 하고 싶습니다.
+// ex) PUT 127.0.0.1:4040/api/0001
+// 이 방식을 이용해서 key 값을 조회하고, body 부분에는 다음과 같이 입력을 했을 때
+// key에 있는 데이터가 수정이 될 수 있게 하고자 합니다.
+// body에 들어갈 값 : { "data": "Cheongju" }
+// 현재 존재하는 updateDB 를 위에 작성한 내용대로 실행했을 때 값이 수정되도록 변경해보세요.
 
-import 'dart:io';
 import 'dart:convert';
+import 'dart:io';
 
 void printHttpServerActivated(HttpServer server) {
   var ip = server.address.address;
@@ -41,11 +34,10 @@ void printHttpRequestInfo(HttpRequest request) async {
 // db : REST 방식을 이용해서 사용자가 요청을 보냈을 때 CRUD 가 진행된 후 결과를 담을 변수
 // request : 사용자의 요청
 // content : 사용자의 요청에 대한 응답으로 전달해줄 값
-
 void printAndSendHttpResponse(var db, var request, var content) async {
   print("\$ $content \n current DB      : $db");
   request.response
-    ..headers.contentType = ContentType('text', 'plain', charset: "utf-8")
+    ..headers.contentType = ContentType('text', 'plain', charset: 'utf-8')
     ..headers.contentLength = content.length
     ..statusCode = HttpStatus.ok
     ..write(content);
@@ -61,7 +53,7 @@ void createDB(var db, var request) async {
   var transaction = jsonDecode(content) as Map;
   var key, value; // 우리가 db 에 정보를 담을 때 각 정보의 key 와 value 에 담을 때 사용할 변수
 
-  print("\> content       : $content");
+  print("\> content        : $content");
 
   // Map변수.forEach : Map변수 안에 있는 각각의 값들을 전부 다 하나씩 접근하겠다.
   // (k, v) : transaction Map 변수에서 가지고 있는 key 와 value 를 k 와 v 로 표현한 것
@@ -79,8 +71,9 @@ void createDB(var db, var request) async {
     content = "Success < $transaction created >";
   } else {
     // db 변수가 이미 key를 가지고 있는 경우
-    content = "Fail < $key already exit >";
+    content = "Fail < $key already exist >";
   }
+
   printAndSendHttpResponse(db, request, content);
 }
 
@@ -89,12 +82,12 @@ void createDB(var db, var request) async {
 // dynamic 은 모든 타입들을 담을 수 있어서 컴퓨터가 자동 완성을 지원하지 않음
 void readDB(Map db, HttpRequest request) async {
   // request.uri : 요청한 주소
-  // pathSegments : 요청한 주소에서 작성이 되어있는 "/" 를 뜻함
+  // pathSegments : 요청한 주소에 작성이 되어있는 "/" 를 뜻함
   //                / 로 이후 값들을 분리해서 저장함.
-  // 예를 들어서 127.0.0.1:4040/api/0001 이라는 주소가 있다면
-  // ["api" "0001"] 이렇게 / 마다 분리를 해줌
+  //                예를 들어서 127.0.0.1:4040/api/0001 이라는 주소가 있다면
+  //                ["api", "0001"] 이렇게 / 마다 분리를 해줌
   // last : 마지막 데이터
-  var key = request.uri.pathSegments.last; //"0001"
+  var key = request.uri.pathSegments.last;
   var content, transaction;
 
   // db 변수가 key 를 현재 가지고 있냐?
@@ -103,8 +96,9 @@ void readDB(Map db, HttpRequest request) async {
     transaction[key] = db[key];
     content = "Success < $transaction retrieved >";
   } else {
-    content = "Fail < $key not-exit >";
+    content = "Fail < $key not-exist >";
   }
+
   printAndSendHttpResponse(db, request, content);
 }
 
@@ -115,8 +109,13 @@ void updateDB(Map db, HttpRequest request) async {
 
   print("\> content        : $content");
 
+  print("트랜잭션 : $transaction");
+
+  // 우리가 가져온 데이터의 key 와 value 를 따로 나누어서 사용하기 위한 부분
   transaction.forEach((k, v) {
-    key = k;
+    print("사용자가 입력한 키 : $k");
+    print("사용자가 입력한 밸류 : $v");
+    key = request.uri.pathSegments.last;
     value = v;
   });
 
@@ -124,12 +123,13 @@ void updateDB(Map db, HttpRequest request) async {
     db[key] = value;
     content = "Success < $transaction updated >";
   } else {
-    content = "Fail < $key no-exit >";
+    content = "Fail < $key not-exist >";
   }
   printAndSendHttpResponse(db, request, content);
 }
 
 void deleteDB(Map db, HttpRequest request) async {
+  // 삭제할 데이터의 키를 / 이후의 문자열로 받고있구나!
   var key = request.uri.pathSegments.last;
   var content, value;
 
@@ -138,7 +138,7 @@ void deleteDB(Map db, HttpRequest request) async {
     db.remove(key);
     content = "Success < {$key, $value} deleted >";
   } else {
-    content = "Fail < $key no-exit >";
+    content = "Fail < $key not-exist >";
   }
   printAndSendHttpResponse(db, request, content);
 }
@@ -162,20 +162,21 @@ Future main() async {
         // POST, GET, PUT, DELETE 가 실행됐을 때 각자 다른 함수를 실행하겠다.
         // default 를 이용해서 다른 메서드를 사용하면 아무런 기능을 하지 않게 지정하겠다.
         switch (request.method) {
-          case 'POST':
+          case "POST":
             createDB(db, request);
             break;
-          case 'GET':
+          case "GET":
             readDB(db, request);
             break;
-          case 'PUT':
+          case "PUT":
             updateDB(db, request);
             break;
-          case 'DELETE':
+          case "DELETE":
             deleteDB(db, request);
             break;
           default:
             print("\$ Unsupported http method");
+            break;
         }
       } catch (err) {
         print("\$ Exception in http request processing");
@@ -184,7 +185,7 @@ Future main() async {
       printAndSendHttpResponse(
         db,
         request,
-        "${request.method} {ERROR: Unsupported API}",
+        "${request.method} {ERROR: UnSupported API}",
       );
     }
   }
